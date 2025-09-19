@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Bin</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+    <div class="app">
+        <!-- Navigation -->
+        <nav class="bottom-nav">
+            <button class="nav-btn active" onclick="showScreen('home')">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </button>
+            <button class="nav-btn" onclick="showScreen('map')">
+                <i class="fas fa-map"></i>
+                <span>Map</span>
+            </button>
+            <button class="nav-btn" onclick="showScreen('offers')">
+                <i class="fas fa-gift"></i>
+                <span>Offers</span>
+            </button>
+        </nav>
+
+        <!-- Écran Accueil -->
+        <div id="home" class="screen active">
+            <header class="header">
+                <h1>Smart Bin</h1>
+            </header>
+            
+            <div class="welcome">
+                <h2>Hello! 👋</h2>
+                <p>Keep recycling for the planet</p>
+            </div>
+
+            <div class="points-card">
+                <h3>My Points</h3>
+                <div class="points-value">1,247</div>
+                <p>+15 points today</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card green">
+                    <i class="fas fa-leaf"></i>
+                    <div class="stat-value">89 kg</div>
+                    <div class="stat-title">Waste Recycled</div>
+                </div>
+                <div class="stat-card blue">
+                    <i class="fas fa-earth-americas"></i>
+                    <div class="stat-value">12.3 kg</div>
+                    <div class="stat-title">CO₂ Saved</div>
+                </div>
+                <div class="stat-card orange">
+                    <i class="fas fa-trophy"></i>
+                    <div class="stat-value">#23</div>
+                    <div class="stat-title">Monthly Rank</div>
+                </div>
+                <div class="stat-card purple">
+                    <i class="fas fa-users"></i>
+                    <div class="stat-value">2,847</div>
+                    <div class="stat-title">Community</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h3>Recent Activity</h3>
+                <div class="activity-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Plastic recycled - +5 points</span>
+                    <small>2h ago</small>
+                </div>
+                <div class="activity-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Glass recycled - +3 points</span>
+                    <small>Yesterday</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Écran Carte -->
+        <div id="map" class="screen">
+            <header class="header">
+                <h1>Smart Bins Map</h1>
+            </header>
+            
+            <div class="map-container">
+                <div id="leaflet-map"></div>
+                
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="dot available"></div>
+                        <span>Available</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="dot full"></div>
+                        <span>Full</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="bin-info" class="bin-info hidden">
+                <div class="bin-info-header">
+                    <h3 id="bin-title"></h3>
+                    <button onclick="closeBinInfo()">×</button>
+                </div>
+                <div class="bin-details">
+                    <div class="status-row">
+                        <span>Status:</span>
+                        <span id="bin-status"></span>
+                    </div>
+                    <div class="status-row">
+                        <span>Fill Level:</span>
+                        <span id="bin-fill"></span>
+                    </div>
+                    <div class="fill-bar">
+                        <div id="fill-progress" class="fill-progress"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Écran Offres -->
+        <div id="offers" class="screen">
+            <header class="header">
+                <h1>My Offers</h1>
+            </header>
+            
+            <div class="points-display">
+                <span>Available Points: <strong>1,247</strong></span>
+            </div>
+
+            <div class="offers-grid">
+                <div class="offer-card">
+                    <div class="offer-brand">McDonald's</div>
+                    <div class="offer-title">Big Mac Menu</div>
+                    <div class="offer-discount">-20%</div>
+                    <div class="offer-points">500 points</div>
+                    <button class="claim-btn" onclick="claimOffer(500)">Redeem</button>
+                </div>
+                
+                <div class="offer-card">
+                    <div class="offer-brand">Starbucks</div>
+                    <div class="offer-title">Free Coffee</div>
+                    <div class="offer-discount">Free</div>
+                    <div class="offer-points">300 points</div>
+                    <button class="claim-btn" onclick="claimOffer(300)">Redeem</button>
+                </div>
+                
+                <div class="offer-card">
+                    <div class="offer-brand">Carrefour</div>
+                    <div class="offer-title">Gift Voucher</div>
+                    <div class="offer-discount">$5</div>
+                    <div class="offer-points">800 points</div>
+                    <button class="claim-btn" onclick="claimOffer(800)">Redeem</button>
+                </div>
+                
+                <div class="offer-card">
+                    <div class="offer-brand">Uber Eats</div>
+                    <div class="offer-title">Free Delivery</div>
+                    <div class="offer-discount">Free</div>
+                    <div class="offer-points">200 points</div>
+                    <button class="claim-btn" onclick="claimOffer(200)">Redeem</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
